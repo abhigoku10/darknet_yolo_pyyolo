@@ -1,0 +1,23 @@
+
+#### Testing and Performance Evaluation of  darknet-yolo/ tiny-yolo ####
+
+#To test on webcam
+./darknet detector demo cfg/voc_xxx.data cfg/yolo-voc_xxx.cfg .backup/filename_xxx.weights 
+
+#To save webcam detected images 
+./darknet detector demo cfg/voc_xxx.data cfg/yolo-voc_xxx.cfg .backup/filename_xxx.weights -prefix "Folder path"
+
+#To test with video file 
+./darknet detector demo cfg/voc_xxx.data cfg/yolo-voc_xxx.cfg .backup/filename_xxx.weights "Video_File path "
+
+#To test on image file  
+./darknet detector test cfg/voc_xxx.data cfg/yolo-voc_xxx.cfg .backup/filename_xxx.weights "Image path" --thresh 0.2
+
+
+##To plot learning rate for yolo 
+
+python plot_yolo.py "Trainingxxx.log" 0
+
+##To plot learning rate for tiny_yolo 
+
+python plot_tinyolo.py "Trainingxxx.log" 0

@@ -1,0 +1,44 @@
+########### Darknet-Yolo Installation,Training and Testing 
+###Refer the site : https://pjreddie.com/darknet/yolo/ 
+
+####Step to install darknet-yolo####
+
+git clone https://github.com/pjreddie/darknet
+cd darknet
+make
+wget https://pjreddie.com/media/files/yolo.weights
+
+##To on CPU/GPU
+#1.Edit the Makefile 
+#2.Enable the CPU/GPU option as 1
+cd darknet
+make
+
+##To check the detection  with a default settings 
+./darknet detect cfg/yolo.cfg yolo.weights data/dog.jpg
+
+## To check the detection with threshold option 
+./darknet detect cfg/yolo.cfg yolo.weights data/dog.jpg -thresh 0
+
+##Similarly same steps to tiny yolo 
+wget https://pjreddie.com/media/files/tiny-yolo-voc.weights
+./darknet detector test cfg/voc.data cfg/tiny-yolo-voc.cfg tiny-yolo-voc.weights data/dog.jpg
+
+##Real time detection with webcam with default settings
+./darknet detector demo cfg/coco.data cfg/yolo.cfg yolo.weights
+
+
+
+####Step to install darknet-yolo####
+##For reference :https://github.com/thomaspark-pkj/pyyolo
+
+git clone --recursive https://github.com/thomaspark-pkj/pyyolo.git
+#Set GPU=1 and CUDNN=1 in Makefile to use GPU.
+#Set CPU=1 and OPENCV=0 in Makefile 
+make
+rm -rf build
+sudo python setup.py build (use setup_gpu.py for GPU)
+sudo python setup.py install (use setup_gpu.py for GPU)
+
+#for testing 
+python example.py

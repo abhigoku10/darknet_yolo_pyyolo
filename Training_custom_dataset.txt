@@ -1,0 +1,62 @@
+#### Training a darknet-yolo/ tiny-yolo using Pascal VOC Format ####
+
+#Step1: Download the VOC set of folder /files 
+wget https://pjreddie.com/media/files/VOCtrainval_11-May-2012.tar
+tar xf VOCtrainval_11-May-2012.tar
+#Step2: After extracting the folder structure should be as show below 
+VOCdevkit->Annotations, Imageset-> Main,Segmentation and JPEGImages 
+#Step3: 
+(Delete all the previous VOC files )
+#Step4:
+Place/copy all the annotated files( of ur dataset) ie xml files into the Annotations folder 
+#Step5:
+ Place/copy all the jpg images into JPEGImages folder
+#Step6: 
+In  Imageset-> Main folder edit  the  train.txt  and val.txt by  adding all the file names needed to be trained and present in the JPEGImages folder 
+#Step7: 
+In scripts->voc_label.py 
+#edit this file by retaining the file structure related to voc_2012 , and the labels to be trained
+#This converts the xml files in the annotation folder into darknet .txt files format
+#Step8:
+python voc_label.py 
+#once succesfully ran the voc_label.py  a label folder willbe automatically created which consists of indivual text
+#file of each image file converted into darnket file format
+#Step9:
+In the scripts->2012_train.txt  will be automatically generated
+#Step10:
+yolo->darknet-> data->voc.names
+#Create a duplicate of this file and edit it by giving the labels to be trained for 
+#Step11:
+yolo->darknet-> cfg->yolo_voc.cfg
+#Create a duplicate of this file and edit the following 
+#1. learning_rate =0.0001 # this parameter changes the learning rate of the network 
+#2. max_batches=40000,40200 # this parameter to used to increase the number of iterations 
+#3. classes=20 # this parameter should be edited to the required trained class label value 
+#4. filters=(5+#classes)*5 # in the last but one layer search for this parameter and edit it 
+
+#Step12:
+yolo->darknet-> cfg->yolo_voc.data
+#Create a duplicate of this file and edit the following 
+#1. classes= 20
+#2. train  = <path-to-voc>/2012_train.txt
+#3. valid  = <path-to-voc>2012_val.txt
+#4. names = data/voc.names
+#5. backup = backup
+
+#Step 13:
+#Recheck the parameters and values passed are similar
+###so the folder structure was like this 
+# ./cfg consisted of yolo_voc_xxx.data dn yolo_voc_xxx.cfg
+# ./scripts consisted of vocdevkit and 2012_train.txt(file of all the img names )
+# ./backup all the weights of training done 
+
+#Step14:
+wget https://pjreddie.com/media/files/darknet19_448.conv.23
+./darknet detector train cfg/voc_xxx.data cfg/yolo-voc_xxx.cfg darknet19_448.conv.23 -gpu 0,1,2 >>log_xxx.log_xxx
+#to use all the cores of gpu and to save the logs into a file which is required for plotting the learrning rate curve
+
+##To start training from an intermediate weight 
+./darknet detector train cfg/voc_xxx.data cfg/yolo-voc_xxx.cfg .backup/filename_xxx.weights -gpu 0,1,2 >>log_xxx.log_xxx
+
+###Similar steps from 1-14 for tiny yolo with the change it he file name thats all 
+
